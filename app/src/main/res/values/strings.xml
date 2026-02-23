@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">fcmfix</string>
+    <string name="app_name">FCM Fix</string>
+    <string name="summary_title">FCM Keepalive Rules</string>
+    <string name="summary_subtitle">Tap a row to toggle allowlist. Existing module logic remains unchanged.</string>
+    <string name="summary_allow_count_initial">Allowed 0</string>
+    <string name="summary_fcm_count_initial">Contains FCM 0</string>
+    <string name="summary_allow_count">Allowed %1$d</string>
+    <string name="summary_fcm_count">Contains FCM %1$d</string>
 </resources>

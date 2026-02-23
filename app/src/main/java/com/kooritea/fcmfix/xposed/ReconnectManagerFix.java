@@ -117,8 +117,8 @@ public class ReconnectManagerFix extends XposedModule {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isInit", true);
             editor.putBoolean("enable", false);
-            editor.putLong("heartbeatInterval", 0L);
-            editor.putLong("reconnInterval", 0L);
+            editor.putLong("heartbeatInterval", DEFAULT_HEARTBEAT_INTERVAL_MS);
+            editor.putLong("reconnInterval", DEFAULT_RECONN_INTERVAL_MS);
             editor.putString("gms_version", versionName);
             editor.putLong("gms_version_code", versionCode);
             editor.putString("config_version", configVersion);
@@ -159,8 +159,8 @@ public class ReconnectManagerFix extends XposedModule {
             protected void afterHookedMethod(final MethodHookParam param) {
                 String alarmType = (String) XposedUtils.getObjectFieldByPath(param.thisObject,  sharedPreferences.getString("timer_alarm_type_property", ""));
                 if("GCM_HB_ALARM".equals(alarmType) || "GCM_CONN_ALARM".equals(alarmType)){
-                    long hinterval = sharedPreferences.getLong("heartbeatInterval", 0L);
-                    long cinterval = sharedPreferences.getLong("reconnInterval", 0L);
+                    long hinterval = getLongConfig("heartbeatInterval", DEFAULT_HEARTBEAT_INTERVAL_MS);
+                    long cinterval = getLongConfig("reconnInterval", DEFAULT_RECONN_INTERVAL_MS);
                     if((hinterval > 1000) || (cinterval > 1000)){
                         param.setResult(param.getResult() + "[fcmfix locked]");
                     }
@@ -173,13 +173,13 @@ public class ReconnectManagerFix extends XposedModule {
                 // 修改心跳间隔
                 String alarmType = (String) XposedUtils.getObjectFieldByPath(param.thisObject,  sharedPreferences.getString("timer_alarm_type_property", ""));
                 if ("GCM_HB_ALARM".equals(alarmType)) {
-                    long interval = sharedPreferences.getLong("heartbeatInterval", 0L);
+                    long interval = getLongConfig("heartbeatInterval", DEFAULT_HEARTBEAT_INTERVAL_MS);
                     if(interval > 1000){
                         param.args[0] = interval;
                     }
                 }
                 if ("GCM_CONN_ALARM".equals(alarmType)) {
-                    long interval = sharedPreferences.getLong("reconnInterval", 0L);
+                    long interval = getLongConfig("reconnInterval", DEFAULT_RECONN_INTERVAL_MS);
                     if(interval > 1000){
                         param.args[0] = interval;
                     }

@@ -33,6 +33,8 @@ public abstract class XposedModule {
     protected XC_LoadPackage.LoadPackageParam loadPackageParam;
     public static Set<String> allowList = null;
     static final String TAG = "FcmFix";
+    protected static final long DEFAULT_HEARTBEAT_INTERVAL_MS = 240000L;
+    protected static final long DEFAULT_RECONN_INTERVAL_MS = 0L;
     private static final HashMap<String,Object> config = new HashMap<>();
 
     @SuppressLint("StaticFieldLeak")
@@ -175,6 +177,27 @@ public abstract class XposedModule {
         return value == null ? defaultValue : (Boolean) value;
     }
 
+    protected long getLongConfig(String key, long defaultValue){
+        if(config.get("init") == null){
+            this.checkUserDeviceUnlockAndUpdateConfig();
+        }
+        if(config.get("init") == null){
+            return defaultValue;
+        }
+        Object value = config.get(key);
+        if(value == null){
+            return defaultValue;
+        }
+        if(value instanceof Number){
+            return ((Number)value).longValue();
+        }
+        try{
+            return Long.parseLong(String.valueOf(value));
+        }catch (Throwable e){
+            return defaultValue;
+        }
+    }
+
     protected static void onUpdateConfig(){
         if(loadConfigThread == null){
             loadConfigThread = new Thread(){
@@ -191,6 +214,8 @@ public abstract class XposedModule {
                             config.put("disableAutoCleanNotification", pref.getBoolean("disableAutoCleanNotification", false));
                             config.put("includeIceBoxDisableApp", pref.getBoolean("includeIceBoxDisableApp", false));
                             config.put("noResponseNotification", pref.getBoolean("noResponseNotification", false));
+                            config.put("heartbeatInterval", pref.getLong("heartbeatInterval", DEFAULT_HEARTBEAT_INTERVAL_MS));
+                            config.put("reconnInterval", pref.getLong("reconnInterval", DEFAULT_RECONN_INTERVAL_MS));
                             config.put("init", true);
                             loadConfigThread = null;
                             return;
@@ -207,6 +232,8 @@ public abstract class XposedModule {
                         config.put("disableAutoCleanNotification", contentProviderHelper.getBoolean("disableAutoCleanNotification", false));
                         config.put("includeIceBoxDisableApp", contentProviderHelper.getBoolean("includeIceBoxDisableApp", false));
                         config.put("noResponseNotification", contentProviderHelper.getBoolean("noResponseNotification", false));
+                        config.put("heartbeatInterval", contentProviderHelper.getLong("heartbeatInterval", DEFAULT_HEARTBEAT_INTERVAL_MS));
+                        config.put("reconnInterval", contentProviderHelper.getLong("reconnInterval", DEFAULT_RECONN_INTERVAL_MS));
                         config.put("init", true);
                         contentProviderHelper.close();
                     }catch (Throwable e){

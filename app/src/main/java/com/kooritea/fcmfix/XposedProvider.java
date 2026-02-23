@@ -21,6 +21,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class XposedProvider extends ContentProvider {
+    private static final long DEFAULT_HEARTBEAT_INTERVAL_MS = 240000L;
+    private static final long DEFAULT_RECONN_INTERVAL_MS = 0L;
 
     private static final UriMatcher uriMatcher;
 
@@ -67,6 +69,8 @@ public class XposedProvider extends ContentProvider {
             data.addRow(new Object[]{"disableAutoCleanNotification", config.isNull("disableAutoCleanNotification") ? "0" : (config.getBoolean("disableAutoCleanNotification") ? "1" : "0") });
             data.addRow(new Object[]{"includeIceBoxDisableApp", config.isNull("includeIceBoxDisableApp") ? "0" : (config.getBoolean("includeIceBoxDisableApp") ? "1" : "0") });
             data.addRow(new Object[]{"noResponseNotification", config.isNull("noResponseNotification") ? "0" : (config.getBoolean("noResponseNotification") ? "1" : "0") });
+            data.addRow(new Object[]{"heartbeatInterval", config.isNull("heartbeatInterval") ? DEFAULT_HEARTBEAT_INTERVAL_MS : config.getLong("heartbeatInterval") });
+            data.addRow(new Object[]{"reconnInterval", config.isNull("reconnInterval") ? DEFAULT_RECONN_INTERVAL_MS : config.getLong("reconnInterval") });
             JSONArray jsonAllowList = config.getJSONArray("allowList");
             for(int i = 0; i < jsonAllowList.length(); i++){
                 data.addRow(new Object[]{"allowList",jsonAllowList.getString(i)});

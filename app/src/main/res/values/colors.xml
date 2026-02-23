@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#0E6E6F</color>
+    <color name="colorPrimaryDark">#0A5152</color>
+    <color name="colorAccent">#DE744A</color>
+    <color name="colorSurface">#F2F6F6</color>
+    <color name="colorCard">#FFFFFF</color>
+    <color name="colorCardSelected">#E6F4F1</color>
+    <color name="colorStroke">#D4E3E0</color>
+    <color name="colorStrokeSelected">#249474</color>
+    <color name="colorTextSecondary">#5B6D6F</color>
+    <color name="colorBadgeBg">#D8EBE7</color>
+    <color name="colorBadgeText">#1B5F53</color>
 </resources>
